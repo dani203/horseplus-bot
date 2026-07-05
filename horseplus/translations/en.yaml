@@ -1,0 +1,24 @@
+configuration:
+  email:
+    name: Email
+    description: Your HorsePlus account email address.
+  password:
+    name: Password
+    description: Your HorsePlus account password.
+  timezone:
+    name: Timezone
+    description: IANA timezone name used for all booking times (e.g. Europe/Berlin).
+  telegram_bot_token:
+    name: Telegram Bot Token
+    description: Optional. Bot token from @BotFather for sending notifications.
+  telegram_chat_id:
+    name: Telegram Chat ID
+    description: Optional. Chat ID to receive booking notifications.
+  retry_count:
+    name: Retry Count
+    description: Default number of booking attempts for new schedules.
+  retry_delay_seconds:
+    name: Retry Delay (seconds)
+    description: Default delay between retry attempts.
+network:
+  8099/tcp: Web UI

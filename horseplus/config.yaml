@@ -1,0 +1,44 @@
+name: "HorsePlus Booking"
+description: "Automated paddock booking for HorsePlus with a web management UI, scheduling, and Telegram notifications."
+version: "1.0.0"
+slug: "horseplus"
+url: "https://github.com/dani203/horseplus-bot"
+arch:
+  - amd64
+  - aarch64
+  - armhf
+  - armv7
+
+startup: services
+boot: auto
+
+# Web UI available via Ingress (HA sidebar) — no exposed host port needed
+ingress: true
+ingress_port: 8099
+panel_icon: "mdi:horse"
+panel_title: "HorsePlus"
+
+# Configuration options (shown in the add-on's "Configuration" tab)
+options:
+  email: ""
+  password: ""
+  timezone: "Europe/Berlin"
+  telegram_bot_token: ""
+  telegram_chat_id: ""
+  retry_count: 3
+  retry_delay_seconds: 2
+
+# Schema drives validation + input widgets in the Configuration tab
+# (password type masks the field in the UI)
+schema:
+  email: "email"
+  password: "password"
+  timezone: "str"
+  telegram_bot_token: "password?"
+  telegram_chat_id: "str?"
+  retry_count: "int(1,10)"
+  retry_delay_seconds: "int(0,60)"
+
+# Persistent storage for schedules.json (survives add-on updates/restarts)
+map:
+  - data:rw

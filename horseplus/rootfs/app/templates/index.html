@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HorsePlus Booking</title>
+  <link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+  <div id="app">
+    <header class="topbar">
+      <div class="brand">🐴 <span>HorsePlus Booking</span></div>
+      <div id="status-badge" class="badge badge-unknown">Connecting…</div>
+    </header>
+
+    <nav class="tabs">
+      <button class="tab-btn active" data-tab="dashboard">Dashboard</button>
+      <button class="tab-btn" data-tab="schedules">Schedules</button>
+      <button class="tab-btn" data-tab="calendar">Calendar</button>
+    </nav>
+
+    <main>
+      <!-- ── Dashboard ── -->
+      <section id="tab-dashboard" class="tab-panel active">
+        <div class="grid">
+          <div class="card">
+            <h2>Book Now</h2>
+            <form id="book-form">
+              <label>Facility
+                <select id="bf-facility" required></select>
+              </label>
+              <label>Horse
+                <select id="bf-horse" required></select>
+              </label>
+              <label>Activity <span class="hint">(optional — auto-selected if empty)</span>
+                <select id="bf-activity"><option value="">Auto</option></select>
+              </label>
+              <div class="row">
+                <label>Date
+                  <input type="date" id="bf-date" required>
+                </label>
+                <label>Time
+                  <input type="time" id="bf-time" required>
+                </label>
+                <label>Duration (h)
+                  <input type="number" id="bf-duration" step="0.25" min="0.25" max="12" value="1.5" required>
+                </label>
+              </div>
+              <button type="submit" class="btn-primary">Book</button>
+            </form>
+            <div id="book-result" class="result"></div>
+          </div>
+
+          <div class="card">
+            <h2>Upcoming Bookings</h2>
+            <div id="bookings-list" class="list">Loading…</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── Schedules ── -->
+      <section id="tab-schedules" class="tab-panel">
+        <div class="card">
+          <div class="card-header">
+            <h2>Auto-Booking Schedules</h2>
+            <button id="add-schedule-btn" class="btn-primary">+ Add Schedule</button>
+          </div>
+          <div id="schedules-list" class="list">Loading…</div>
+        </div>
+      </section>
+
+      <!-- ── Calendar ── -->
+      <section id="tab-calendar" class="tab-panel">
+        <div class="card">
+          <div class="card-header">
+            <button id="cal-prev">‹</button>
+            <h2 id="cal-title">Calendar</h2>
+            <button id="cal-next">›</button>
+          </div>
+          <div id="calendar-grid" class="calendar-grid">Loading…</div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- ── Schedule Modal ── -->
+  <div id="schedule-modal" class="modal hidden">
+    <div class="modal-content">
+      <h2 id="schedule-modal-title">New Schedule</h2>
+      <form id="schedule-form">
+        <input type="hidden" id="sf-id">
+        <label>Name
+          <input type="text" id="sf-name" placeholder="e.g. Tuesday paddock" required>
+        </label>
+        <label>Facility
+          <select id="sf-facility" required></select>
+        </label>
+        <label>Horse
+          <select id="sf-horse" required></select>
+        </label>
+        <label>Activity <span class="hint">(optional)</span>
+          <select id="sf-activity"><option value="">Auto</option></select>
+        </label>
+
+        <fieldset>
+          <legend>When to run the booking attempt</legend>
+          <div class="row">
+            <label>Weekday
+              <select id="sf-trigger-weekday">
+                <option value="0">Monday</option>
+                <option value="1">Tuesday</option>
+                <option value="2">Wednesday</option>
+                <option value="3">Thursday</option>
+                <option value="4">Friday</option>
+                <option value="5">Saturday</option>
+                <option value="6">Sunday</option>
+              </select>
+            </label>
+            <label>Time
+              <input type="time" id="sf-trigger-time" value="08:00" required>
+            </label>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>What to book</legend>
+          <div class="row">
+            <label>Days after trigger
+              <input type="number" id="sf-date-offset" value="7" min="0" max="30" required>
+            </label>
+            <label>Time
+              <input type="time" id="sf-booking-time" value="16:30" required>
+            </label>
+            <label>Duration (h)
+              <input type="number" id="sf-duration" step="0.25" min="0.25" max="12" value="1.5" required>
+            </label>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Retry policy</legend>
+          <div class="row">
+            <label>Retry attempts
+              <input type="number" id="sf-retry-count" value="3" min="1" max="10">
+            </label>
+            <label>Delay between retries (s)
+              <input type="number" id="sf-retry-delay" value="2" min="0" max="60">
+            </label>
+          </div>
+        </fieldset>
+
+        <div class="modal-actions">
+          <button type="button" id="schedule-cancel-btn" class="btn-secondary">Cancel</button>
+          <button type="submit" class="btn-primary">Save Schedule</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="static/app.js"></script>
+</body>
+</html>

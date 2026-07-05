@@ -1,17 +1,15 @@
-ARG BUILD_FROM
-FROM $BUILD_FROM
+FROM python:3.12-alpine
 
 ENV LANG=C.UTF-8 \
     PYTHONUNBUFFERED=1 \
     PORT=8099
 
-# The HA base images already ship Python 3; just add pip + timezone data.
-RUN apk add --no-cache py3-pip tzdata
+RUN apk add --no-cache tzdata
 
 WORKDIR /app
 
 COPY rootfs/app/requirements.txt .
-RUN pip3 install --no-cache-dir --break-system-packages -r requirements.txt
+RUN pip3 install --no-cache-dir -r requirements.txt
 
 COPY rootfs/app/ .
 

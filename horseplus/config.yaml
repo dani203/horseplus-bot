@@ -6,8 +6,6 @@ url: "https://github.com/dani203/horseplus-bot"
 arch:
   - amd64
   - aarch64
-  - armhf
-  - armv7
 
 startup: services
 boot: auto

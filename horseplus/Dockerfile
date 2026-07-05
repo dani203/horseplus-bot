@@ -12,8 +12,5 @@ WORKDIR /app
 COPY rootfs/app/requirements.txt .
 RUN pip3 install --no-cache-dir -r requirements.txt
 
-COPY rootfs/app/ .
-
-EXPOSE 8099
-
-CMD ["python3", "/app/main.py"]
+# Copy app files and s6-overlay service definition
+COPY rootfs/ /

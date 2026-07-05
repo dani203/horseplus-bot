@@ -94,7 +94,7 @@ class HorsePlusAPI:
         except requests.HTTPError as exc:
             if exc.response.status_code == 401 and not self._reauth_in_progress:
                 return self._reauth(self._get, endpoint, **kwargs)
-            raise
+            self._raise_with_body(exc, endpoint)
 
     def _post(self, endpoint: str, data: Any = None, **kwargs) -> Any:
         url = f"{BASE_URL}{endpoint}"
@@ -107,7 +107,25 @@ class HorsePlusAPI:
         except requests.HTTPError as exc:
             if exc.response.status_code == 401 and not self._reauth_in_progress:
                 return self._reauth(self._post, endpoint, data, **kwargs)
-            raise
+            self._raise_with_body(exc, endpoint, data)
+
+    @staticmethod
+    def _raise_with_body(exc: requests.HTTPError, endpoint: str, data: Any = None) -> None:
+        """Log the response body (the server usually explains what went wrong) and
+        re-raise with that detail included, instead of the generic requests message."""
+        body = ""
+        try:
+            body = exc.response.text[:2000]
+        except Exception:
+            pass
+        _LOGGER.error(
+            "HorsePlus API error on %s (status %s). Request: %s. Response body: %s",
+            endpoint, exc.response.status_code if exc.response is not None else "?",
+            data, body or "<empty>",
+        )
+        raise requests.HTTPError(
+            f"{exc} — response body: {body or '<empty>'}", response=exc.response
+        ) from exc
 
     # ── Data fetchers ───────────────────────────────────────────────────────────
 

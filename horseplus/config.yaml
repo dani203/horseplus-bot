@@ -1,6 +1,6 @@
 name: "HorsePlus Booking"
 description: "Automated paddock booking for HorsePlus with a web management UI, scheduling, and Telegram notifications."
-version: "1.0.1"
+version: "1.0.2"
 slug: "horseplus"
 url: "https://github.com/dani203/horseplus-bot"
 arch:
@@ -9,6 +9,7 @@ arch:
 
 startup: services
 boot: auto
+init: false
 
 # Web UI available via Ingress (HA sidebar) — no exposed host port needed
 ingress: true

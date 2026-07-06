@@ -48,6 +48,11 @@ class HorsePlusAPI:
         data = response.json()
         self.user_data = data.get("user", {})
 
+        # Multi-farm accounts require personId (distinct from userId) on several
+        # newer endpoints. Capture it from the top-level "person" object if present.
+        if "person" in data:
+            self.user_data["personId"] = data["person"].get("id")
+
         if "Authorization" in response.headers:
             self.session.headers["Authorization"] = response.headers["Authorization"]
 
@@ -169,6 +174,7 @@ class HorsePlusAPI:
             "rangeFrom": date_from,
             "rangeTo": date_to,
             "userId": self.user_data["id"],
+            "personId": self.user_data.get("personId", self.user_data["id"]),
             "farmId": self.user_data["farm"]["id"],
         })
 
@@ -181,6 +187,7 @@ class HorsePlusAPI:
                 "momentTo": end.isoformat() + "Z",
             },
             "userId": self.user_data["id"],
+            "personId": self.user_data.get("personId", self.user_data["id"]),
             "farmId": self.user_data["farm"]["id"],
         })
 
@@ -248,6 +255,7 @@ class HorsePlusAPI:
             "to": end_iso,
             "comment": comment,
             "userId": self.user_data["id"],
+            "personId": self.user_data.get("personId", self.user_data["id"]),
             "farmId": self.user_data["farm"]["id"],
         }
         try:

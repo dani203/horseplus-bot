@@ -337,6 +337,14 @@ async function loadCalendar() {
     });
 
     grid.innerHTML = "";
+
+    // JS getDay() is Sunday-first (0=Sun..6=Sat); convert to Monday-first (0=Mon..6=Sun)
+    // so the grid lines up under the Mon–Sun header regardless of which weekday the month starts on.
+    const firstWeekday = (new Date(state.calYear, state.calMonth - 1, 1).getDay() + 6) % 7;
+    for (let i = 0; i < firstWeekday; i++) {
+      grid.appendChild(el(`<div class="cal-day empty"></div>`));
+    }
+
     for (let d = 1; d <= daysInMonth; d++) {
       const dayEvents = eventsByDay[d] || [];
       const dayDiv = el(`<div class="cal-day"><div class="day-num">${d}</div></div>`);
@@ -344,6 +352,13 @@ async function loadCalendar() {
         dayDiv.appendChild(el(`<div class="cal-event">${ev.start_time} ${ev.facility} (${ev.horse})</div>`));
       });
       grid.appendChild(dayDiv);
+    }
+
+    // Pad the final week out to a full row of 7 for a tidy grid.
+    const totalCells = firstWeekday + daysInMonth;
+    const trailing = (7 - (totalCells % 7)) % 7;
+    for (let i = 0; i < trailing; i++) {
+      grid.appendChild(el(`<div class="cal-day empty"></div>`));
     }
   } catch (e) {
     grid.innerHTML = `<div class="empty-msg">Could not load calendar: ${e.message}</div>`;

@@ -1,6 +1,6 @@
 name: "HorsePlus Booking"
 description: "Automated paddock booking for HorsePlus with a web management UI, scheduling, and Telegram notifications."
-version: "1.0.4"
+version: "1.0.5"
 slug: "horseplus"
 url: "https://github.com/dani203/horseplus-bot"
 arch:

@@ -10,7 +10,7 @@ from datetime import datetime, timedelta, timezone
 _LOGGER = logging.getLogger(__name__)
 
 BASE_URL = "https://my.horseplus.app"
-APP_VERSION = "7adf7cb2146d7a32c984158240a8256837154f49"
+APP_VERSION = "bea321f2f9eb8ad8f7f32d8696c967584987fbf7"
 
 
 class HorsePlusAPI:
@@ -147,6 +147,7 @@ class HorsePlusAPI:
     def get_activity_types(self) -> List[Dict]:
         return self._post("/api/facility-reservations/get-preferred-intervals-query", {
             "userId": self.user_data["id"],
+            "personId": self.user_data.get("personId", self.user_data["id"]),
             "farmId": self.user_data["farm"]["id"],
         })
 
@@ -171,8 +172,7 @@ class HorsePlusAPI:
     def get_facility_calendar(self, facility_id: str, date_from: str, date_to: str) -> List[Dict]:
         return self._post("/api/facilities/get-calendar-events-for-facility-query", {
             "facilityId": facility_id,
-            "rangeFrom": date_from,
-            "rangeTo": date_to,
+            "momentRange": {"start": date_from, "end": date_to},
             "userId": self.user_data["id"],
             "personId": self.user_data.get("personId", self.user_data["id"]),
             "farmId": self.user_data["farm"]["id"],
@@ -182,9 +182,9 @@ class HorsePlusAPI:
         start = datetime(year, month, 1)
         end = (datetime(year + 1, 1, 1) if month == 12 else datetime(year, month + 1, 1)) - timedelta(seconds=1)
         return self._post("/api/dashboard/get-appointments-for-month-query", {
-            "timeFrame": {
-                "momentFrom": start.isoformat() + "Z",
-                "momentTo": end.isoformat() + "Z",
+            "momentRange": {
+                "start": start.isoformat() + "Z",
+                "end": end.isoformat() + "Z",
             },
             "userId": self.user_data["id"],
             "personId": self.user_data.get("personId", self.user_data["id"]),
@@ -251,8 +251,7 @@ class HorsePlusAPI:
             "facilityId": facility_id,
             "facilityReservationActivityId": activity_id,
             "horseId": horse_id,
-            "from": start_iso,
-            "to": end_iso,
+            "momentRange": {"start": start_iso, "end": end_iso},
             "comment": comment,
             "userId": self.user_data["id"],
             "personId": self.user_data.get("personId", self.user_data["id"]),

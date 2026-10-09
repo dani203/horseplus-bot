@@ -31,6 +31,21 @@ self-contained service that runs entirely inside Home Assistant:
 
 See [DOCS.md](horseplus/DOCS.md) for full configuration and usage details.
 
+## Updating
+
+After a new version is published, open **Settings > Add-ons > Add-on Store** in
+Home Assistant and use **Check for updates** in the top-right menu. Then open
+**HorsePlus Booking** and select **Update**. Publishing to GitHub makes the
+update available; it does not force an installed add-on to update automatically.
+After updating, check the add-on's **Log** tab and verify the calendar loads.
+
+## Development
+
+Run the offline API regression tests with `python3 -m unittest discover -s tests -v`
+after installing the application's requirements. Tests do not contact HorsePlus
+or create reservations. Browser HAR captures may contain passwords and session
+tokens and must not be committed.
+
 ## Repository structure
 
 This repo follows the standard Home Assistant add-on repository layout:
